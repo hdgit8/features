@@ -13,3 +13,7 @@ button {
 *::-webkit-scrollbar {
 	display: none; /* Safari and Chrome */
 }
+
+.cm-editor {
+	width: 100%;
+}

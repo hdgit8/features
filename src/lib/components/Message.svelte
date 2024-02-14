@@ -16,7 +16,7 @@
 {#if $messageStore.show}
 	<div class="fixed bottom-0 left-0 right-0" style=" z-index:100;">
 		<div
-			class="bg-white dark:bg-[--dark-800] flex border-2"
+			class="bg-[--dark-800] flex border-2"
 			class:text-red-500={$messageStore.type === 'error'}
 			class:border-red-500={$messageStore.type === 'error'}
 			class:font-bold={$messageStore.type === 'error'}

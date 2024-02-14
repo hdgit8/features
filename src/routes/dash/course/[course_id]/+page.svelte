@@ -1,30 +1,41 @@
 <script lang="ts">
 	import messageStore from "$lib/stores/message.store.js";
-	import navStore from "$lib/stores/nav.store";
+	import { onMount } from "svelte";
 
     export let data
     let { supabase, session } = data
     $: ({ supabase, session } = data) // listen to changes
 
+    let titleInputValue = data.course.title
+    let originalTitle = data.course.title
+
     let bannerInput;
     let bannerImage;
 
+    let publicBannerImageUrl;
+    
     let loading = false;
 
-    navStore.title(`Dashboard / ${data.title}`, "/dash")
+    onMount(() => {
+        if (data.course.banner_path) {
+            publicBannerImageUrl = supabase.storage.from("courses").getPublicUrl(data.course.banner_path).data.publicUrl
+        }
+    })
 
-    async function onChangeBanner(event) {
-        if (!event.target.files) return;
+    async function onDropImage(event) {
+        event.preventDefault();
+        
+        if (!event.dataTransfer.files) return;
 
-        const file = event.target.files[0]
+        const file = event.dataTransfer.files[0]
 
         if (!file.type.includes("image")) return;
 
         loading = true;
-        console.log("uploading image")
 
         const reader = new FileReader();
         reader.addEventListener("load", function() {
+            publicBannerImageUrl = reader.result;
             bannerImage.setAttribute("src", reader.result)
         });
 
@@ -34,44 +45,88 @@
         const result = await supabase
         .storage
         .from("courses")
-        .upload(bannerPath, file)
+        .upload(bannerPath, file, {
+            upsert: true
+        })
+
+        const result2 = await supabase.from("courses").update({
+            banner_path: bannerPath,
+        }).eq("id", data.course.id)
 
         // once uploaded show preview
         reader.readAsDataURL(file);
 
         loading = false;
     }
+
+    async function onChangeBanner(event) {
+        if (!event.target.files) return;
+
+        const file = event.target.files[0]
+
+        if (!file.type.includes("image")) return;
+
+        loading = true;
+
+        const reader = new FileReader();
+        reader.addEventListener("load", function() {
+            publicBannerImageUrl = reader.result;
+            bannerImage.setAttribute("src", reader.result)
+        });
+
+        messageStore.showLoading("Uploading...", () => loading)
+
+        const bannerPath = `${data.course.id}/banner.${file.type.split('/')[1]}`;
+        const result = await supabase
+        .storage
+        .from("courses")
+        .upload(bannerPath, file, {
+            upsert: true
+        })
+
+        const result2 = await supabase.from("courses").update({
+            banner_path: bannerPath,
+        }).eq("id", data.course.id)
+
+        // once uploaded show preview
+        reader.readAsDataURL(file);
+
+        loading = false;
+    }
+
+    async function saveChanges() {
+        await supabase.from("courses").update({
+            title: titleInputValue
+        }).eq("id", data.course.id)
+
+        originalTitle = titleInputValue
+    }
 </script>
 
 <svelte:head>
-    <title>{`Dashboard / ${data.title}`}</title>
+    <title>{`Dashboard / ${titleInputValue}`}</title>
 </svelte:head>
 
 {#if session}
-<div
-class:ml-5={!$navStore.isOpen}
-class="mr-5 bg-white dark:bg-[--dark-800] rounded-lg transition-all">
+<div class="mr-5 bg-[--dark-800] rounded-lg transition-all">
     <div class="p-5 flex flex-col gap-3">
-        <label for="banner" class="max-w-xl">
+        <label for="banner" class="max-w-xl" ondragover="return false" on:drop={onDropImage}>
             <div class="uppercase text-xs font-bold py-2">Banner</div>
-            {#if data.banner_public_url}
+            {#if publicBannerImageUrl}
                 <div
                     bind:this={bannerImage}
-                    style="background-image:url({data.banner_public_url})"
-                    class="bg-cover bg-left max-h-52 rounded-lg aspect-video overflow-hidden flex flex-col gap-3 border border-dashed border-black dark:border-gray-200 w-full bg-gray-100 dark:bg-[--dark-700]"
+                    style="background-image:url({publicBannerImageUrl})"
+                    class="bg-cover bg-left max-h-52 rounded-lg aspect-video overflow-hidden flex flex-col gap-3 border border-dashed border-gray-200 w-full bg-[--dark-700]"
                 >
                     <div class="h-full w-full bg-gradient-to-r from-black via-70% via-transparent to-transparent p-4 flex flex-col">
-                        <h3 class="text-3xl font-medium md:text-4xl p-3 w-2/3">{data.course.title}</h3>
+                        <h3 class="text-white text-3xl font-medium md:text-4xl p-3 w-2/3">{titleInputValue}</h3>
                     </div>
                 </div>
             {:else}
-                <div
-                    bind:this={bannerImage}
-                    style="background-image:url({data.banner_public_url})"
-                    class="bg-cover bg-left md:max-h-52 rounded-lg aspect-video overflow-hidden flex flex-col gap-3 border border-dashed border-black dark:border-gray-200 w-full bg-gray-100 dark:bg-[--dark-700]"
+                <div bind:this={bannerImage} class="bg-cover bg-left md:max-h-52 rounded-lg aspect-video overflow-hidden flex flex-col gap-3 border border-dashed border-gray-200 w-full bg-[--dark-700]"
                 >
                     <div class="h-full w-full bg-gradient-to-r from-black via-70% via-transparent to-transparent p-4 flex md:flex-row flex-col">
-                        <h3 class="text-3xl font-medium md:text-4xl p-3 w-2/3">{data.title}</h3>
+                        <h3 class="text-white text-3xl font-medium md:text-4xl p-3 w-2/3">{titleInputValue}</h3>
                         <div class="flex flex-col content-center justify-center text-center">
                             <div class="mx-auto">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
@@ -89,6 +144,7 @@ class="mr-5 bg-white dark:bg-[--dark-800] rounded-lg transition-all">
                 on:change={onChangeBanner}
                 id="banner"
                 type="file"
+                multiple
                 accept=".jpg, .jpeg, .png, .webp"
                 class="hidden"
                 required
@@ -96,8 +152,13 @@ class="mr-5 bg-white dark:bg-[--dark-800] rounded-lg transition-all">
         </label>
         <label>
             <div class="uppercase text-xs font-bold py-2">Course Name</div>
-            <input class="p-3 w-full bg-[--dark-600] rounded-md" type="text" value={data.title}>
+            <input class="text-white p-3 w-full bg-[--dark-600] rounded-md" type="text" placeholder="eg. {data.course.title}" bind:value={titleInputValue}>
         </label>
+        {#if titleInputValue !== originalTitle}
+            <div class="flex">
+                <button on:click={saveChanges} class="ml-auto rounded-md p-2 bg-red-500 hover:text-white text-gray-100">Save Changes</button>
+            </div>
+        {/if}
     </div>
 </div>
 {:else}

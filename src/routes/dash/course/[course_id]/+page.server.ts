@@ -9,14 +9,12 @@ export async function load({params, locals: { supabase, getSession }}) {
         throw error(400, {message:"Session does not exist"})
     }
 
-    console.log(params)
-
     const {data, error:err} = await supabaseT.from("courses").select().eq("id", params.course_id);
     if (!data || err) {
         throw error(500, {message:"Error getting course from db"})
     }
 
     return {
-        ...data[0],
+        course: {...data[0]},
     }
 }

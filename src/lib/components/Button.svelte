@@ -7,14 +7,13 @@
 
 
 <button
-class:bg-gray-200={active}
-class:dark:bg-[--dark-700]={active}
+class:opacity-70={!active}
 class:justify-center={align === "center"}
 class:justify-start={align === "left"}
 class:justify-end={align === "right"}
 class:opacity-50={disabled}
 disabled={disabled}
 on:click
-class="{className} text-center w-full disabled:text-gray-900 disabled:dark:text-white text-gray-600 dark:text-gray-300 hover:text-gray-900 grow dark:hover:text-white p-2 rounded-lg flex gap-2">
+class="{className} text-center w-full bg-[--dark-700] disabled:text-white text-gray-300 grow hover:text-white p-2 rounded-lg flex gap-2">
     <slot></slot>
 </button>

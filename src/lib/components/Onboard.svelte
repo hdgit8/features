@@ -115,10 +115,10 @@
 
 {#if !session}
 <div
-class="fixed top-0 left-0 right-0 bottom-0 z-40 backdrop-blur-sm bg-gray-100 bg-opacity-60 dark:bg-black dark:bg-opacity-60">
+class="fixed top-0 left-0 right-0 bottom-0 z-40 backdrop-blur-sm bg-black bg-opacity-60">
 </div>
 
-<div class="fixed top-0 left-0 right-0 bottom-0 z-50 dark:text-white overflow-y-scroll">
+<div class="fixed top-0 left-0 right-0 bottom-0 z-50 text-white overflow-y-scroll">
     <div class="mt-[20vh] w-screen h-40">
         
         <!-- typing animation -->
@@ -150,25 +150,23 @@ class="fixed top-0 left-0 right-0 bottom-0 z-40 backdrop-blur-sm bg-gray-100 bg-
 
         <!-- signup or login or skip -->
     </div>
-    <div class="text-black dark:text-gray-200 mt-24">
+    <div class="text-gray-200 mt-24">
         <div class="flex gap-2 justify-center mb-2">
             {#if stage === "email"}
-            <input type="email" bind:value={email} required placeholder="your@email.com" class="placeholder:text-gray-400 p-2 px-3 text-base rounded bg-white dark:bg-[--dark-700] w-60">
+            <input type="email" bind:value={email} required placeholder="your@email.com" class="placeholder:text-gray-400 p-2 px-3 text-base rounded bg-[--dark-700] w-60">
             {/if}
             {#if stage === "password"}
-            <input type="password" bind:value={password} required placeholder="password" class="placeholder:text-gray-400 p-2 px-3 text-base rounded bg-white dark:bg-[--dark-700] w-60">
+            <input type="password" bind:value={password} required placeholder="password" class="placeholder:text-gray-400 p-2 px-3 text-base rounded bg-[--dark-700] w-60">
             {/if}
             {#if stage === "confirm_password"}
-            <input type="password" bind:value={confirmPassword} required placeholder="confirm password" class="placeholder:text-gray-400 p-2 px-3 text-base rounded bg-white dark:bg-[--dark-700] w-60">
+            <input type="password" bind:value={confirmPassword} required placeholder="confirm password" class="placeholder:text-gray-400 p-2 px-3 text-base rounded bg-[--dark-700] w-60">
             {/if}
         </div>
         <div class="flex gap-2 justify-center items-center flex-col text-center">
             <button
             on:click={signupButton}
             class:hover:text-gray-500={true}
-            class:dark:hover:bg-[--dark-700]={true}
-            class:dark:hover:text-gray-300={true}
-            class="p-2 flex w-60 mx-auto justify-center bg-white text-gray-400 px-3 rounded gap-2 dark:bg-[--dark-800]">
+            class="p-2 flex w-60 mx-auto justify-center hover:bg-[--dark-700] hover:text-gray-300 text-gray-400 px-3 rounded gap-2 bg-[--dark-800]">
                 <span>Create Account</span>
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3" />
@@ -177,10 +175,7 @@ class="fixed top-0 left-0 right-0 bottom-0 z-40 backdrop-blur-sm bg-gray-100 bg-
             <span class="text-gray-400">- or -</span>
             <button
             on:click={loginButton}
-            class:hover:text-gray-500={true}
-            class:dark:hover:bg-[--dark-700]={true}
-            class:dark:hover:text-gray-300={true}
-            class="p-2 flex w-60 mx-auto justify-center bg-white text-gray-400 px-3 rounded gap-2 dark:bg-[--dark-800]">
+            class="p-2 flex w-60 mx-auto justify-center hover:bg-[--dark-700] hover:text-gray-300 text-gray-400 px-3 rounded gap-2 bg-[--dark-800]">
                 <span>Login</span>
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3" />
