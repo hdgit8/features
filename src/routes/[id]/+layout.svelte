@@ -8,6 +8,8 @@
     import 'highlight.js/styles/github-dark.min.css';
     import 'github-markdown-css/github-markdown-dark.css'
 
+    import Settings from "$lib/components/Course/Settings.svelte";
+
     export let data;
     let { supabase, session, course } = data
     $: ({ supabase, session } = data) // listen to changes
@@ -15,6 +17,8 @@
     let section;
     $: (async function () {
         if (!$page.params.section) {
+            isFocused = true;
+            isShowingMobileSection = true;
             return;
         }
 
@@ -30,7 +34,7 @@
     });
 
     let isFocused = true;
-    let isShowingMobileSection = false;
+    let isShowingMobileSection = true;
 
     let modules = [];
     async function loadModules(courseID) {

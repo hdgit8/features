@@ -5,20 +5,68 @@
 	import { debounce } from "$lib/utils/debounce";
 	import type { SupabaseClient } from "@supabase/supabase-js";
 	import { onMount } from "svelte";
+	import Livecode from "../Codecast/Livecode.svelte";
+	import Recordcast from "../Codecast/Recordcast.svelte";
+	import { readable } from "svelte/store";
+	import { decode, encode } from "@msgpack/msgpack";
+	import { compressByteArray, decompressByteArray } from "$lib/utils/compress";
 
     export let supabase: SupabaseClient;
     export let sectionId: String;
     export let section_embeds: Array<any>;
+    export let section_codecasts: Array<any>;
+
+    const path = `courses/${sectionId}`;
+    const changesPath = `${path}/codecast.mpack.gz`
+    const audioPath = `${path}/codecast.mp4`
+
+    onMount(async () => {
+        if (section_codecasts.length > 0)
+        {
+            const duration = section_codecasts[0].duration;
+            const { data:audioData } = supabase.storage.from('codecasts').getPublicUrl(audioPath)
+            const { data:changesData, error } = await supabase.storage.from('codecasts').download(changesPath)
+            if (error) {
+                console.error(error);
+                messageStore.showError(error.message);
+            }
+
+            if (audioData && changesData) {
+                const mpack = await decompressByteArray(new Uint8Array(await changesData.arrayBuffer()), "gzip");
+                const changes = decode(mpack);
+			    await recordcast.loadData(audioData.publicUrl, changes, duration);
+            }
+        }
+
+        if (section_embeds.length > 0) {
+            embedURL = section_embeds[0].url;
+            sectionEmbedId = section_embeds[0].id;
+
+            const url = new URL(section_embeds[0].url);
+            if (url.hostname.includes("youtu")) {
+                embedType = "yt";
+
+                const v = url.searchParams.get("v")
+                if (!v) {
+                    messageStore.showError("Url missing video id.")
+                    return;
+                }
+
+                embedId = v;
+                return;
+            } else {
+                messageStore.showError("Url not a Youtube link.")
+            }
+        }
+    });
     
     let embedType = "yt"; // yt, or vim
     let embedId = "";
     let embedURL = "";
-    let id: String;
-
-    async function save() {
+    async function saveEmbed() {
         const {error, data} = await supabase.from("section_embeds").update({
             url: embedURL,
-        }).eq("id", id).eq("section_id", sectionId).select();
+        }).eq("id", sectionEmbedId).eq("section_id", sectionId).select();
 
         if (data) {
             section_embeds = data;
@@ -39,9 +87,8 @@
 
         if (error) console.error(error);
 
-        console.log('saved')
+        console.log('saved embed')
     }
-
     async function addEmbed() {
         const {error, data} = await supabase.from("section_embeds").insert({
             section_id: sectionId,
@@ -50,44 +97,72 @@
 
         if (data) {
             section_embeds = data;
-            id = section_embeds[0].id;
         }
 
         if (error) console.error(error);
     }
 
-    onMount(() => {
-        if (section_embeds.length > 0) {
-            embedURL = section_embeds[0].url;
-            id = section_embeds[0].id;
+    let recordcast: Recordcast;
+    async function saveCodecast() {
+        const {changes, duration, audio} = recordcast.getData();
 
-            const url = new URL(section_embeds[0].url);
-            if (url.hostname.includes("youtu")) {
-                embedType = "yt";
+        if (!sectionId) {
+            console.log("no section id exiting save")
+            return;
+        };
 
-                const v = url.searchParams.get("v")
-                if (!v) {
-                    messageStore.showError("Url missing video id.")
-                    return;
-                }
+        const {error, data} = await supabase.from("section_codecasts").update({
+            path,
+            duration,
+            thumbnail_code: changes.text[changes.text.length - 1]
+        }).eq("section_id", sectionId).select();
 
-                embedId = v;
-                return;
-            } else {
-                messageStore.showError("Url not a Youtube link.")
-            }
+        if (!data?.length) {
+            console.log("data returned has no length! returning");
+            return;
+        };
+
+        console.log("data", data)
+
+        if (data && !error) {
+            section_codecasts = data;
+
+            const mpack = encode(changes);
+            const gz = await compressByteArray(mpack, 'gzip');
+
+            const {error: er1} = await supabase.storage.from("codecasts").upload(changesPath, gz, {upsert:true})
+            if (er1) {messageStore.showError(er1.message); console.error(er1)}
+            const {error: er2} = await supabase.storage.from("codecasts").upload(audioPath, audio.mp4Blob, {upsert:true})
+            if (er2) {messageStore.showError(er2.message); console.error(er2)}
         }
-    });
+
+        if (error) console.error(error);
+
+        console.log('saved codecast')
+    }
+
+    async function addCodecast() {
+        const {error, data} = await supabase.from("section_codecasts").insert({
+            section_id: sectionId,
+        }).select();
+
+        if (data) {
+            section_codecasts = data;
+        }
+
+        if (error) console.error(error);
+    }
+
 </script>
 
 {#if section_embeds.length > 0}
     <div class="flex-col items-center pt-2 gap-2 flex">
         <div class="w-full">
-            <input on:keyup={debounce(save)} class="w-full p-1 rounded text-gray-500" type="text" placeholder="Youtube or Vimeo link" bind:value={embedURL}>
+            <input on:keyup={debounce(saveEmbed)} class="w-full p-1 rounded text-gray-500" type="text" placeholder="Youtube or Vimeo link" bind:value={embedURL}>
         </div>
         <div class="w-full max-h-96">
             {#if embedType == "yt"}
-                <iframe style="width:100%;" 
+                <iframe style="width:100%;"
                 class="aspect-video rounded max-h-96" 
                 src="https://www.youtube.com/embed/{embedId}?si=Jtz7-tzqf7Z8JU9M&showinfo=0&modestbranding=1" 
                 title="YouTube video player" frameborder="0"
@@ -102,9 +177,13 @@
             {/if}
         </div>
     </div>
+{:else if section_codecasts.length > 0}
+    <div>
+        <Recordcast bind:this={recordcast} on:ready={saveCodecast}></Recordcast>
+    </div>
 {:else}
     <div class="h-96 flex items-center">
-        <button class="mx-auto bg-gray-300 hover:opacity-100 opacity-70 p-2 rounded text-gray-700">Add Codecast</button>
+        <button on:click={addCodecast} class="mx-auto bg-gray-300 hover:opacity-100 opacity-70 p-2 rounded text-gray-700">Add Codecast</button>
         <button on:click={addEmbed} class="mx-auto bg-gray-300 hover:opacity-100 opacity-70 p-2 rounded text-gray-700">Add Youtube Embed</button>
     </div>
 {/if}

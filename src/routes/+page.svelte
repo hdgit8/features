@@ -1,5 +1,5 @@
 <script>
-    import Course from '$lib/components/CourseCard.svelte';
+    import Course from '$lib/components/Course/CourseCard.svelte';
     export let data
     let { supabase, session } = data
     $: ({ supabase, session } = data) // listen to changes

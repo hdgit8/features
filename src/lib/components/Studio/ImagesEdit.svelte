@@ -1,3 +1,7 @@
+<script>
+    
+</script>
+
 <div class="flex gap-2">
     <div>
         <button class="mx-auto text-gray-700 bg-gray-300 opacity-70 hover:opacity-100 hover:text-black p-2 rounded">

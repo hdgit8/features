@@ -2,7 +2,7 @@
 	import { invalidate } from '$app/navigation';
     import Auth from '$lib/components/Auth.svelte';
 	import Button from '$lib/components/Button.svelte';
-    import Course from '$lib/components/CourseCard.svelte';
+    import Course from '$lib/components/Course/CourseCard.svelte';
 	import { onMount } from 'svelte';
     export let data
     let { supabase, session, courses } = data
@@ -20,7 +20,7 @@
 <!-- Login and Signup -->
 <Auth bind:supabase bind:session></Auth>
 
-<div class="ml-5 lg:ml-0 mt-5">
+<div class="ml-5 md:ml-0 mt-5">
     <div class="mr-5 mb-5 transition-all">
         <div
             class="text-white h-96 lg:max-w-100% p-4 bg-[--dark-800] rounded-2xl">

@@ -1,7 +1,7 @@
 <script>
     import Auth from '$lib/components/Auth.svelte';
 	import Button from '$lib/components/Button.svelte';
-    import Course from '$lib/components/CourseCard.svelte';
+    import Course from '$lib/components/Course/CourseCard.svelte';
 	import { onMount } from 'svelte';
     
     export let data
@@ -19,7 +19,7 @@
 <div class="ml-5 md:ml-0 mt-5">
     <div class="mr-5 mb-5 transition-all">
         <div
-            class="text-white h-96 lg:max-w-100% text-gray-900 p-4 bg-[--dark-800] rounded-2xl">
+            class="h-96 lg:max-w-100% text-gray-900 p-4 bg-[--dark-800] rounded-2xl">
             <h1>Statistics</h1>
         </div>
     </div>

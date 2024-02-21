@@ -6,7 +6,7 @@
 	import { javascript } from '@codemirror/lang-javascript';
 	import { indentWithTab } from '@codemirror/commands';
 
-	let listenToCodeChanges = true;
+	let isPlaybackMode = false; // no editing is disabled
 	let ready = false;
 	let preview;
 	let editor;
@@ -18,18 +18,19 @@
 	export let cursor = { anchor: 0, head: 0 };
 
 	export function set(_code, _cursor) {
-		listenToCodeChanges = false;
+		isPlaybackMode = true;
+
+		if (!_code) return;
+
+		if (!_cursor) {
+			mirror.dispatch({
+				changes: { from: 0, to: mirror.state.doc.length, insert: _code }
+			});
+			return;
+		}
 
 		cursor = _cursor;
 		code = _code;
-
-		if (!_code) {
-			console.log('code', _code);
-		}
-
-		if (!_cursor) {
-			console.log('cursor', _cursor);
-		}
 
 		if (scrollIntoView) {
 			mirror.dispatch({
@@ -47,8 +48,8 @@
 		}
 	}
 
-	export function setModeListenToTextChanges() {
-		listenToCodeChanges = true;
+	export function allowEditing() {
+		isPlaybackMode = false;
 	}
 
 	$: onChange(code);
@@ -341,7 +342,7 @@
 					basicSetup,
 					javascript(),
 					EditorView.updateListener.of((view) => {
-						if (!listenToCodeChanges) {
+						if (isPlaybackMode) {
 							// we are playing back changes not recording them
 							return;
 						}
@@ -363,8 +364,6 @@
 				],
 				parent: editor
 			});
-
-			console.log(mirror);
 		}
 	});
 </script>

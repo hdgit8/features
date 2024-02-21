@@ -38,6 +38,7 @@
 		"@codemirror/commands": "^6.3.3",
 		"@codemirror/lang-javascript": "^6.2.1",
 		"@codemirror/view": "^6.23.1",
+		"@msgpack/msgpack": "3.0.0-beta2",
 		"@octokit/rest": "^20.0.2",
 		"@supabase/ssr": "^0.0.10",
 		"@supabase/supabase-js": "^2.39.0",

@@ -5,6 +5,11 @@
 	import { onMount } from "svelte";
     import marked from "$lib/markdown/markdown.js";
 	import messageStore from "$lib/stores/message.store";
+	import { decompressByteArray } from "$lib/utils/compress.js";
+	import { decode } from "@msgpack/msgpack";
+	import Codecast from "$lib/components/Codecast/Codecast.svelte";
+	import { draw } from "svelte/transition";
+	import { browser } from "$app/environment";
 
     export let data;
     let { supabase, session, section, markdown } = data
@@ -17,8 +22,16 @@
 
     let embedId = "";
     $: loadSection($page.params.sectionId);
+
+    let duration:number = section.section_codecasts ? section?.section_codecasts[0]?.duration : 0.0;
+    let audioURL:string;
+    let changes:{
+		time: [],
+		text: [],
+		selection: { head: [], anchor: [] }
+	};
     async function loadSection(sectionID:String) {
-        const{data} = await supabase.from("sections").select("*, section_embeds(*)").eq("id", sectionID)
+        const{data} = await supabase.from("sections").select("*, section_embeds(*), section_codecasts(*)").eq("id", sectionID)
         if (data)
         {
             section = data[0];
@@ -27,6 +40,8 @@
             }
 
             if (section.section_embeds.length > 0) {
+                if (!section.section_embeds[0].url) return;
+
                 const url = new URL(section.section_embeds[0].url);
                 if (url.hostname.includes("youtu")) {
                     const v = url.searchParams.get("v")
@@ -35,6 +50,28 @@
                     } else {
                         messageStore.showError("Url missing video id.")
                     }
+                }
+            }
+
+            if (section.section_codecasts.length > 0)
+            {
+                const section_codecast = section.section_codecasts[0];
+                const path = `courses/${section.id}`;
+                const changesPath = `${path}/codecast.mpack.gz`
+                const audioPath = `${path}/codecast.mp4`
+
+                const { data:audioData } = supabase.storage.from('codecasts').getPublicUrl(audioPath)
+                const { data:changesData, error } = await supabase.storage.from('codecasts').download(changesPath)
+                if (error) {
+                    console.error(error);
+                    messageStore.showError(error.message);
+                }
+
+                if (audioData && changesData) {
+                    const mpack = await decompressByteArray(new Uint8Array(await changesData.arrayBuffer()), "gzip");
+                    changes = decode(mpack);
+                    audioURL = audioData.publicUrl;
+                    duration = section_codecast.duration;
                 }
             }
         }
@@ -51,6 +88,9 @@
 </div>
 
 <div class="overflow-scroll">
+    {#if section.section_codecasts.length > 0 && browser}
+        <Codecast bind:recordingLengthSeconds={duration} bind:audioURL={audioURL} bind:changes={changes}></Codecast>
+    {/if}
     {#if section.section_embeds.length > 0}
         <iframe style="width:100%;" 
         class="aspect-video" 
@@ -66,10 +106,10 @@
 </div>
 
 {#if showStudioView}
-    <Studio {supabase} bind:section={section} bind:showStudioView={showStudioView}></Studio>
+    <Studio {supabase} section={section} bind:showStudioView={showStudioView}></Studio>
 {/if}
 
-<style scoped>
+<style lang="scss">
     .max-h-video {
         max-height: calc(90vh);
     }
@@ -81,6 +121,14 @@
 		margin: 0 auto;
 		padding: 45px;
         background-color: transparent;
+    }
+
+    .markdown-body ul {
+        @apply list-disc;
+    }
+    
+    .markdown-body li::marker {
+        content: initial;
     }
 
     @media (max-width: 767px) {
