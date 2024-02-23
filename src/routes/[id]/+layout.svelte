@@ -109,8 +109,7 @@
                 <div class="bg-cover" style="background-image:url({course.public_url})">
                     <div class="md:w-80 flex flex-col bg-top h-52 bg-gradient-to-b from-black">
                         <div class="flex p-2">
-                                <h1 class="px-2 text-white text-ellipsis overflow-hidden whitespace-nowrap text-lg font-semibold">{course?.title}</h1>
-                            
+                            <h1 class="px-2 text-white text-ellipsis overflow-hidden whitespace-nowrap text-lg font-semibold">{course?.title}</h1>
                         </div>
                     </div>
                 </div>
@@ -148,9 +147,7 @@
                 </svg>
             </button>
             <div class="py-2">
-                {#if !$page.params.section}
-                    {course.title}
-                {:else}
+                {#if $page.params.section}
                     {section?.name}
                 {/if}
             </div>

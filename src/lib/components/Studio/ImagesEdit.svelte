@@ -1,8 +1,6 @@
 <script lang="ts">
 	import type { SupabaseClient } from "@supabase/supabase-js";
 
-    import {uuidv4} from 'uuid'
-
     export let supabase:SupabaseClient
     export let sectionId:string;
     export let courseId:string;

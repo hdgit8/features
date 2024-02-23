@@ -2,32 +2,9 @@
     import Course from '$lib/components/Course/CourseCard.svelte';
 	import { onMount } from 'svelte';
     export let data
-    let { supabase, session } = data
+    let { supabase, session, courses } = data
     $: ({ supabase, session } = data) // listen to changes
-
-    let title = "Sandbox";
-    let visible = false;
-
-    let courses = [];
-
-    onMount(async () => {
-        const{data} = await supabase.from("courses").select()
-        if (data) {
-            for (let i = 0; i < data.length; i++) {
-                if (data[i].banner_path)
-                {
-                    const result = supabase.storage.from("courses").getPublicUrl(data[i].banner_path)
-                    data[i]["public_url"] = result.data.publicUrl
-                }
-            }
-        }
-        courses = data;
-    })
 </script>
-
-<svelte:head>
-    <title>Sparker - {title}</title>
-</svelte:head>
 
 <div class="ml-5 md:ml-0 mt-5">
     <div class="min-h-[50vh] max-h-[50vh] mb-5">

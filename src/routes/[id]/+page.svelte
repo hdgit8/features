@@ -24,14 +24,17 @@
 </div>
 
 <div class="flex flex-col pb-10">
-    <div class="flex flex-col gap-2 p-5 md:flex-row mx-auto w-full">
-        <div class="md:w-1/2 w-full text-lg font-semibold text-center my-auto">
-            <p>Are You Ready to Code Minecraft?</p>
-            <p>Can You Code it?...</p>
-            <p>Yes, Yes You Can.</p>
+    <div class="bg-cover bg-center" style="background-image:url({course.public_url})">
+        <div class="flex flex-col bg-gradient-to-b from-transparent to-black">
+            <div class="flex flex-col gap-2 p-5 md:flex-row mx-auto w-full">
+                <iframe class="md:w-1/2 sm:w-2/3 w-full mx-auto aspect-video rounded-lg" src="https://www.youtube.com/embed/KhCeUKdNrl0?autoplay=1" title="YouTube Video Player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                <div class="md:w-1/2 w-full text-lg font-semibold text-center my-auto">
+                    <p class="text-white font-semibold text-2xl">{course.title}</p>
+                </div>
+            </div>
         </div>
-        <iframe class="md:w-1/2 sm:w-2/3 w-full mx-auto aspect-video rounded-lg" src="https://www.youtube.com/embed/KhCeUKdNrl0?autoplay=1" title="YouTube Video Player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
     </div>
+
     <div class="max-w-3xl mx-auto p-5 flex flex-col gap-5">
         <div class="text-lg">
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Minus porro deleniti, unde, numquam voluptates reprehenderit excepturi doloremque architecto voluptatum, quisquam reiciendis possimus eveniet. Exercitationem quibusdam quisquam voluptatibus soluta voluptates totam.
