@@ -30,6 +30,10 @@
 </svelte:head>
 
 <div class="ml-5 md:ml-0 mt-5">
+    <div class="flex flex-col pt-[15vh] pb-[20vh]">
+        <div class="mx-auto text-5xl text-white">Learning to Code <strong>Sucks</strong></div>
+    </div>
+
     <div class="grid grid-cols-1 lg:grid-cols-3 xl:grid-cols-4 mr-5 mb-5 transition-all gap-5">
         <!-- large course card
             - default to last active course

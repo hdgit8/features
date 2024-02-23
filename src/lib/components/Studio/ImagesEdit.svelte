@@ -1,5 +1,18 @@
-<script>
-    
+<script lang="ts">
+	import type { SupabaseClient } from "@supabase/supabase-js";
+
+    import {uuidv4} from 'uuid'
+
+    export let supabase:SupabaseClient
+    export let sectionId:string;
+    export let courseId:string;
+    let file;
+
+    async function uploadImage() {
+        if (!file) return;
+
+        supabase.storage.from("courses").list(`${courseId}/${sectionId}`)
+    }
 </script>
 
 <div class="flex gap-2">
@@ -10,5 +23,5 @@
             </svg>
         </button>
     </div>
-    <div class="my-auto">Add Image(s)</div>
+    <input type="file" bind:value={file} class="my-auto">Add Image(s)</input>
 </div>
