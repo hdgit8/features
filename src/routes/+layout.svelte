@@ -46,7 +46,7 @@
 
 <!-- navigation -->
 <Navigator>
-    <a href="/about" class="hidden md:flex pt-1 mx-auto transition-all">
+    <a href="/" class="hidden md:flex pt-1 mx-auto transition-all">
         <div 
             class="flex h-14 transition-all opacity-90 hover:opacity-100">
             <img

@@ -30,13 +30,13 @@
 </svelte:head>
 
 <div class="ml-5 md:ml-0 mt-5">
-    <div class="min-h-[50vh] max-h-[50vh] mb-10">
-        <div class="absolute top-0 right-0 left-0 z-0 mb-10">
+    <div class="min-h-[50vh] max-h-[50vh] mb-5">
+        <div class="absolute top-0 right-0 left-0 z-0 mb-5">
             <video
                 muted
                 autoplay
                 loop
-                class="fade-in min-h-[50vh] max-h-[50vh] min-w-full object-cover"
+                class="min-h-[50vh] max-h-[50vh] min-w-full object-cover"
             >
                 <source src="/automata.mov" type="video/mp4" />
             </video>
@@ -47,14 +47,12 @@
                 style="object-fit:cover"
             /> -->
             <div
-                class="absolute top-14 left-0 right-0 h-[50vh]"
+                class="absolute top-0 left-0 right-0 h-[50vh]"
                 style="background: linear-gradient(to bottom, rgb(0, 0, 0, 0) 70%, #000 100%);"
             />
         </div>
         <!-- TEXT -->
-        <div
-        class="pt-14 pb-14 z-20 absolute top-0 right-0 left-0 mx-auto px-4 flex flex-col items-center h-[50vh] mb-10"
-        >
+        <div class="pt-14 z-20 absolute top-0 right-0 left-0 mx-auto px-4 flex flex-col items-center h-[50vh] mb-10">
             <div class="mx-auto text-4xl sm:text-5xl md:text-6xl text-white font-semibold mt-[10vh]">
                 Learning to Code <span class=" font-extrabold">Sucks</span>
             </div>
