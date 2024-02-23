@@ -30,15 +30,40 @@
 </svelte:head>
 
 <div class="ml-5 md:ml-0 mt-5">
-    <div class="flex flex-col pt-[15vh] pb-[20vh]">
-        <div class="mx-auto text-5xl text-white">Learning to Code <strong>Sucks</strong></div>
+    <div class="min-h-[50vh] max-h-[50vh] mb-10">
+        <div class="absolute top-0 right-0 left-0 z-0 mb-10">
+            <video
+                muted
+                autoplay
+                loop
+                class="fade-in min-h-[50vh] max-h-[50vh] min-w-full object-cover"
+            >
+                <source src="/automata.mov" type="video/mp4" />
+            </video>
+            <!-- <img
+                src="/flappy.gif"
+                class="fade-in min-h-screen min-w-full"
+                alt="flappy bird"
+                style="object-fit:cover"
+            /> -->
+            <div
+                class="absolute top-14 left-0 right-0 h-[50vh]"
+                style="background: linear-gradient(to bottom, rgb(0, 0, 0, 0) 70%, #000 100%);"
+            />
+        </div>
+        <!-- TEXT -->
+        <div
+        class="pt-14 pb-14 z-20 absolute top-0 right-0 left-0 mx-auto px-4 flex flex-col items-center h-[50vh] mb-10"
+        >
+            <div class="mx-auto text-4xl sm:text-5xl md:text-6xl text-white font-semibold mt-[10vh]">
+                Learning to Code <span class=" font-extrabold">Sucks</span>
+            </div>
+            <div class="mx-auto text-2xl py-5">We are here to fix that.</div>
+        </div>
     </div>
-
+<!-- 
     <div class="grid grid-cols-1 lg:grid-cols-3 xl:grid-cols-4 mr-5 mb-5 transition-all gap-5">
-        <!-- large course card
-            - default to last active course
-            - fallback to "start-here" course if no last_active_course_id
-        -->
+
         <div class="text-white bg-black overflow-hidden lg:col-span-2 xl:col-span-3 h-96 lg:h-full lg:max-w-100% rounded-2xl">
             <div 
             class="w-full h-full bg-cover bg-center border-collapse rounded-2xl"
@@ -55,26 +80,11 @@
                 </div>
             </div>
         </div>
-        <div class="rounded-2xl">
-            <div class="flex mb-2">
-                <div class="font-semibold text-lg ml-1 text-white">New</div>
-                <div class="font-semibold ml-auto h-min text-gray-500 text-xs flex bg-[--dark-700] p-[0.2rem] rounded-full px-2">
-                    <span>View All</span>
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4">
-                        <path fill-rule="evenodd" d="M2 10a.75.75 0 01.75-.75h12.59l-2.1-1.95a.75.75 0 111.02-1.1l3.5 3.25a.75.75 0 010 1.1l-3.5 3.25a.75.75 0 11-1.02-1.1l2.1-1.95H2.75A.75.75 0 012 10z" clip-rule="evenodd" />
-                    </svg>
-                </div>
-            </div>
-            <div class="grid grid-cols-2 lg:grid-cols-1 transition-all gap-5">
-                <Course></Course>
-                <Course></Course>
-            </div>
-        </div>
     </div>
-    
+     -->
     <div class="rounded-2xl mr-5 transition-all">
         <div class="flex mb-2">
-            <div class="font-semibold text-lg ml-1 text-white">Top Courses</div>
+            <div class="font-semibold text-lg ml-1 text-white">Courses</div>
             <div class="font-semibold ml-auto h-min text-gray-500 text-xs flex bg-[--dark-700] p-[0.2rem] rounded-full px-2">
                 <span>View All</span>
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4">
