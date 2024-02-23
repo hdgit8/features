@@ -26,9 +26,9 @@
 <div class="flex flex-col pb-10">
     <div class="bg-cover bg-center" style="background-image:url({course.public_url})">
         <div class="flex flex-col bg-gradient-to-b from-transparent to-black">
-            <div class="flex flex-col gap-2 p-5 md:flex-row mx-auto w-full">
+            <div class="flex flex-col gap-2 p-5 lg:flex-row mx-auto w-full">
                 <iframe class="md:w-1/2 sm:w-2/3 w-full mx-auto aspect-video rounded-lg" src="https://www.youtube.com/embed/KhCeUKdNrl0?autoplay=1" title="YouTube Video Player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-                <div class="md:w-1/2 w-full text-lg font-semibold text-center my-auto">
+                <div class="md:w-1/2 w-full text-lg font-semibold text-center my-auto mx-auto">
                     <p class="text-white font-semibold text-2xl">{course.title}</p>
                 </div>
             </div>
