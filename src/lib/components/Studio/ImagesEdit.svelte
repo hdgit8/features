@@ -23,5 +23,8 @@
             </svg>
         </button>
     </div>
-    <input type="file" bind:value={file} class="my-auto">Add Image(s)</input>
+    <label>
+        Add Image(s)
+        <input type="file" bind:value={file} class="my-auto">
+    </label>
 </div>
