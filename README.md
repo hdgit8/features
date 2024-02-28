@@ -4,3 +4,6 @@ Libs
   - Markdown https://github.com/markedjs/marked-highlight
   - Code highlighting https://github.com/highlightjs/highlight.js#install-via-npm-package
 - Parse code into json syntax tree https://github.com/wooorm/lowlight
+
+- Voice & Video https://sendbird.com/docs/calls/sdk/v1/javascript/features/group-call#2-display-video-view
+- Payments?

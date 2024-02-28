@@ -20,6 +20,7 @@
     const changesPath = `${path}/codecast.mpack.gz`
     const audioPath = `${path}/codecast.mp4`
 
+    let sectionEmbedId:string;
     onMount(async () => {
         if (section_codecasts.length > 0)
         {
@@ -64,6 +65,8 @@
     let embedId = "";
     let embedURL = "";
     async function saveEmbed() {
+        if (!sectionEmbedId) return;
+
         const {error, data} = await supabase.from("section_embeds").update({
             url: embedURL,
         }).eq("id", sectionEmbedId).eq("section_id", sectionId).select();

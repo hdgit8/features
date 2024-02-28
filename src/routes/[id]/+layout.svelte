@@ -9,20 +9,29 @@
     import 'github-markdown-css/github-markdown-dark.css'
 
     import Settings from "$lib/components/Course/Settings.svelte";
+	import { goto } from "$app/navigation";
 
     export let data;
     let { supabase, session, course } = data
     $: ({ supabase, session } = data) // listen to changes
 
     let section;
+    let module;
     $: (async function () {
-        if (!$page.params.section) {
+        if (!$page.params.moduleId && !$page.params.sectionId) {
             isFocused = true;
             isShowingMobileSection = true;
-            return;
         }
 
-        const{data} = await supabase.from("sections").select().eq("id", $page.params.section)
+        if (!$page.params.moduleId) return
+        const{data:dat1} = await supabase.from("modules").select().eq("id", $page.params.moduleId)
+        if (dat1)
+        {
+            module = dat1[0];
+        }
+
+        if (!$page.params.sectionId) return
+        const{data} = await supabase.from("sections").select().eq("id", $page.params.sectionId)
         if (data)
         {
             section = data[0];
@@ -117,7 +126,7 @@
         </a>
         <div class="w-full flex flex-col overflow-scroll">
             {#each modules as module(module.id)}
-            <Module on:click={() => isShowingMobileSection = true} on:update={sortModules} bind:supabase sections={module.sections} courseId={course.id} bind:num={module.num} id={module.id} bind:name={module.name}></Module>
+            <Module on:update={sortModules} bind:supabase sections={module.sections} courseId={course.id} bind:num={module.num} moduleId={module.id} bind:name={module.name}></Module>
             {/each}
             <button class="items-center mx-auto p-2" on:click={() => {showNewModulePopup = true}}>
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
@@ -147,8 +156,10 @@
                 </svg>
             </button>
             <div class="py-2">
-                {#if $page.params.section}
+                {#if $page.params.sectionId}
                     {section?.name}
+                {:else if $page.params.moduleId}
+                    {module?.name}
                 {/if}
             </div>
         </div>

@@ -23,7 +23,7 @@
     let embedId = "";
     $: loadSection($page.params.sectionId);
 
-    let duration:number = section.section_codecasts ? section?.section_codecasts[0]?.duration : 0.0;
+    let duration:number = section?.section_codecasts ? section?.section_codecasts[0]?.duration : 0.0;
     let audioURL:string;
     let changes:{
 		time: [],
@@ -35,11 +35,11 @@
         if (data)
         {
             section = data[0];
-            if (section.markdown) {
+            if (section?.markdown) {
                 markdown = await marked.parse(section.markdown)
             }
 
-            if (section.section_embeds.length > 0) {
+            if (section?.section_embeds.length > 0) {
                 if (!section.section_embeds[0].url) return;
 
                 const url = new URL(section.section_embeds[0].url);
@@ -53,7 +53,7 @@
                 }
             }
 
-            if (section.section_codecasts.length > 0)
+            if (section?.section_codecasts.length > 0)
             {
                 const section_codecast = section.section_codecasts[0];
                 const path = `courses/${section.id}`;
@@ -88,10 +88,10 @@
 </div>
 
 <div class="overflow-scroll">
-    {#if section.section_codecasts.length > 0 && browser}
+    {#if section?.section_codecasts.length > 0 && browser}
         <Codecast bind:recordingLengthSeconds={duration} bind:audioURL={audioURL} bind:changes={changes}></Codecast>
     {/if}
-    {#if section.section_embeds.length > 0}
+    {#if section?.section_embeds.length > 0}
         <iframe style="width:100%;" 
         class="aspect-video" 
         src="https://www.youtube.com/embed/{embedId}?si=Jtz7-tzqf7Z8JU9M&showinfo=0&modestbranding=1&autoplay=1" 

@@ -1,14 +1,15 @@
 <script lang="ts">
 	import messageStore from "$lib/stores/message.store.js";
+	import { decodeStream } from "@msgpack/msgpack";
 	import type { Session, SupabaseClient } from "@supabase/supabase-js";
 	import { onMount } from "svelte";
 
     export let showSettings:boolean;
-    export let course:object;
+    export let course:any;
     export let supabase: SupabaseClient;
 
-    let titleInputValue = course.title
-    let originalTitle = course.title
+    let originalTitle = course?.title
+    let originalDescription = course?.description;
 
     let bannerInput;
     let bannerImage;
@@ -22,6 +23,13 @@
             publicBannerImageUrl = supabase.storage.from("courses").getPublicUrl(course.banner_path).data.publicUrl
         }
     })
+
+    function resize(event) {
+        if (!event.target) return;
+
+        event.target.style.height = 'auto';
+        event.target.style.height = event.target.scrollHeight + 'px';
+    }
 
     async function onDropImage(event) {
         event.preventDefault();
@@ -97,18 +105,20 @@
 
     async function saveChanges() {
         await supabase.from("courses").update({
-            title: titleInputValue
+            title: course.title,
+            description: course.description,
         }).eq("id", course.id)
 
-        originalTitle = titleInputValue
+        originalTitle = course.title
+        originalDescription = course.description;
     }
 </script>
 
 <svelte:head>
-    <title>{`Dashboard / ${titleInputValue}`}</title>
+    <title>{`Dashboard / ${course.title}`}</title>
 </svelte:head>
 
-<div class="bg-[--dark-800] rounded-lg fixed top-0 left-0 right-0 bottom-0 z-40">
+<div class="bg-[--dark-800] rounded-lg fixed top-0 left-0 right-0 bottom-0 z-40 overflow-y-scroll">
     <div class="p-5 flex gap-3">
         <div>
             Settings for "{course.title}"
@@ -127,14 +137,14 @@
                     class="bg-cover bg-left max-h-52 rounded-lg aspect-video overflow-hidden flex flex-col gap-3 border border-dashed border-gray-200 w-full bg-[--dark-700]"
                 >
                     <div class="h-full w-full bg-gradient-to-r from-black via-70% via-transparent to-transparent p-4 flex flex-col">
-                        <h3 class="text-white text-3xl font-medium md:text-4xl p-3 w-2/3">{titleInputValue}</h3>
+                        <h3 class="text-white text-3xl font-medium md:text-4xl p-3 w-2/3">{course.title}</h3>
                     </div>
                 </div>
             {:else}
                 <div bind:this={bannerImage} class="bg-cover bg-left md:max-h-52 rounded-lg aspect-video overflow-hidden flex flex-col gap-3 border border-dashed border-gray-200 w-full bg-[--dark-700]"
                 >
                     <div class="h-full w-full bg-gradient-to-r from-black via-70% via-transparent to-transparent p-4 flex md:flex-row flex-col">
-                        <h3 class="text-white text-3xl font-medium md:text-4xl p-3 w-2/3">{titleInputValue}</h3>
+                        <h3 class="text-white text-3xl font-medium md:text-4xl p-3 w-2/3">{course.title}</h3>
                         <div class="flex flex-col content-center justify-center text-center">
                             <div class="mx-auto">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
@@ -159,10 +169,14 @@
             />
         </label>
         <label>
-            <div class="uppercase text-xs font-bold py-2">Course Name</div>
-            <input class="text-white p-3 w-full bg-[--dark-600] rounded-md" type="text" placeholder="eg. {course.title}" bind:value={titleInputValue}>
+            <div class="uppercase text-xs font-bold py-2">Name</div>
+            <input class="text-white p-3 w-full bg-[--dark-600] rounded-md" type="text" placeholder="eg. This Course Sucks Don't Buy it" bind:value={course.title}>
         </label>
-        {#if titleInputValue !== originalTitle}
+        <label>
+            <div class="uppercase text-xs font-bold py-2">Tagline</div>
+            <textarea on:click={resize} on:input={resize} on:keyup={resize} class="text-white p-3 w-full bg-[--dark-600] rounded-md" placeholder="eg. Get ready to build monstrously lavish and exciting worlds that players can't wait to explore!" bind:value={course.description}></textarea>
+        </label>
+        {#if course.title !== originalTitle || course.description !== originalDescription}
             <div class="flex">
                 <button on:click={saveChanges} class="ml-auto rounded-md p-2 bg-red-500 hover:text-white text-gray-100">Save Changes</button>
             </div>

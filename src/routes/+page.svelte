@@ -7,22 +7,16 @@
 </script>
 
 <div class="ml-5 md:ml-0 mt-5">
-    <div class="min-h-[50vh] max-h-[50vh] mb-5">
-        <div class="absolute top-0 right-0 left-0 z-0 mb-5">
+    <div class="min-h-[50vh] max-h-[50vh]">
+        <div class="absolute top-0 right-0 left-0 z-0">
             <video
                 muted
                 autoplay
                 loop
-                class="min-h-[50vh] max-h-[50vh] min-w-full object-cover"
+                class="min-h-[50vh] fade-in max-h-[50vh] min-w-full object-cover"
             >
                 <source src="/automata.mov" type="video/mp4" />
             </video>
-            <!-- <img
-                src="/flappy.gif"
-                class="fade-in min-h-screen min-w-full"
-                alt="flappy bird"
-                style="object-fit:cover"
-            /> -->
             <div
                 class="absolute top-0 left-0 right-0 h-[50vh]"
                 style="background: linear-gradient(to bottom, rgb(0, 0, 0, 0) 70%, #000 100%);"
@@ -30,7 +24,7 @@
         </div>
         <!-- TEXT -->
         <div class="pt-14 z-20 absolute top-0 right-0 left-0 mx-auto px-4 flex flex-col items-center h-[50vh] mb-10">
-            <div class="mx-auto text-4xl sm:text-5xl md:text-6xl text-white font-semibold mt-[10vh]">
+            <div class="mx-auto text-4xl sm:text-5xl md:text-6xl text-white font-semibold mt-[15vh]">
                 Learning to Code <span class=" font-extrabold">Sucks</span>
             </div>
             <div class="mx-auto text-2xl py-5">We are here to fix that.</div>
@@ -59,7 +53,7 @@
      -->
     <div class="rounded-2xl mr-5 transition-all">
         <div class="flex mb-2">
-            <div class="font-semibold text-lg ml-1 text-white">Courses</div>
+            <div class="font-semibold text-lg ml-1 text-white">New Courses</div>
             <div class="font-semibold ml-auto h-min text-gray-500 text-xs flex bg-[--dark-700] p-[0.2rem] rounded-full px-2">
                 <span>View All</span>
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4">
@@ -126,3 +120,20 @@
         </a>
     </div>    
 </div>
+
+
+<style>
+     .fade-in {
+        opacity: 1;
+        animation: fade-in-anim 3s;
+    }
+
+    @keyframes fade-in-anim {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
+    }
+</style>
