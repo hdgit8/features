@@ -7,30 +7,42 @@
 </script>
 
 <div class="ml-5 md:ml-0 mt-5">
-    <div class="min-h-[50vh] max-h-[50vh]">
+    <div class="min-h-[100vh] max-h-[100vh]">
         <div class="absolute top-0 right-0 left-0 z-0">
-            <video
-                muted
-                autoplay
-                loop
-                class="min-h-[50vh] fade-in max-h-[50vh] min-w-full object-cover"
-            >
-                <source src="/automata.mov" type="video/mp4" />
-            </video>
             <div
-                class="absolute top-0 left-0 right-0 h-[50vh]"
+                style="background-image:url('/relaxing.png');"
+                class="min-h-[100vh] fade-in max-h-[100vh] min-w-full bg-cover bg-bottom lg:bg-"
+            >
+            </div>
+            <div
+                class="absolute top-0 left-0 right-0 h-[100vh]"
                 style="background: linear-gradient(to bottom, rgb(0, 0, 0, 0) 70%, #000 100%);"
             />
         </div>
         <!-- TEXT -->
-        <div class="pt-14 z-20 absolute top-0 right-0 left-0 mx-auto px-4 flex flex-col items-center h-[50vh] mb-10">
-            <div class="mx-auto text-4xl sm:text-5xl md:text-6xl text-white font-semibold mt-[15vh]">
-                Learning to Code <span class=" font-extrabold">Sucks</span>
+        <div class="pt-14 z-20 absolute top-0 right-0 left-0 md:left-16 px-20 h-[100vh] mb-10 flex flex-col">
+            <div class="font-effect-hero font-rubik text-transparent bg-clip-text bg-gradient-to-br from-white to-gray-800 text-5xl md:text-6xl lg:text-8xl text-white mt-[5vh]">
+                Learn to Code
             </div>
-            <div class="mx-auto text-2xl py-5">We are here to fix that.</div>
+            <div class="text-xl py-5 font-light text-transparent bg-clip-text bg-gradient-to-br from-white to-gray-800">
+                <p>The best place to learn to code at the speed of light.</p>
+                <p>No more random tutorials.</p>
+            </div>
+            <div class="mt-auto mb-28">
+                <button class="flex bg-white text-black p-2 pl-4 rounded-full">
+                    <div class="text-lg font-semibold">
+                        Get Started
+                    </div>
+                    <div class="py-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
+                            <path fill-rule="evenodd" d="M8.22 5.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L11.94 10 8.22 6.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+                        </svg>
+                    </div>
+                </button>
+            </div>
         </div>
     </div>
-<!-- 
+    <!--
     <div class="grid grid-cols-1 lg:grid-cols-3 xl:grid-cols-4 mr-5 mb-5 transition-all gap-5">
 
         <div class="text-white bg-black overflow-hidden lg:col-span-2 xl:col-span-3 h-96 lg:h-full lg:max-w-100% rounded-2xl">
@@ -53,7 +65,7 @@
      -->
     <div class="rounded-2xl mr-5 transition-all">
         <div class="flex mb-2">
-            <div class="font-semibold text-lg ml-1 text-white">New Courses</div>
+            <div class="font-semibold text-lg ml-1 text-white">Courses</div>
             <div class="font-semibold ml-auto h-min text-gray-500 text-xs flex bg-[--dark-700] p-[0.2rem] rounded-full px-2">
                 <span>View All</span>
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4">
@@ -135,5 +147,11 @@
         to {
             opacity: 1;
         }
+    }
+
+    .font-effect-hero {
+        -webkit-text-stroke: 0.4px #ffffff80;
+        -webkit-text-fill-color: transparent;
+        text-shadow: -1px -1px 0 hsla(0,0%,100%,.2), 1px 1px 0 rgba(0,0,0,.1);
     }
 </style>
