@@ -2,20 +2,18 @@
 	import { browser } from "$app/environment";
 
     let scrollable:HTMLElement;
-    let open = false;
-    $: if (open && browser) {
-        scrollable?.scrollTo({
-            left: 1000,
-            behavior: "smooth",
-        })
-    }
 
     function toggle() {
-        open = !open;
+        if (browser) {
+            scrollable?.scrollTo({
+                left: 1000,
+                behavior: "smooth",
+            })
+        }
     }
 </script>
 
-<div class="sm:w-80 w-[calc(100vw-4rem)] bg-red-500 h-screen md:overflow-hidden">
+<div class="sm:w-80 w-[calc(100vw-4rem)] bg-red-500 h-screen md:overflow-hidden fixed top-0 left-0 bottom-0">
 
 </div>
 
