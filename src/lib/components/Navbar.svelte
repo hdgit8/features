@@ -11,7 +11,6 @@
     }
 
     let open = false;
-
     function toggle() {
         open = !open;
     }
@@ -20,7 +19,7 @@
 <div class="flex pt-3 pb-2 fixed top-0 left-0 right-0 z-20 px-4 w-full backdrop-blur-sm backdrop-brightness-100 bg-black/25">
     <a href="/" class="flex hover:opacity-80">
         <img alt="sparker" src="/sparker_white.png" class="h-9 p-1">
-        <div class="text-white text-xl font-medium p-1">Sparker3D.com</div>
+        <div class="text-white text-xl font-medium p-1 hidden md:block">Sparker3D.com</div>
     </a>
     {#if session}
     <div class="ml-auto text-white">
