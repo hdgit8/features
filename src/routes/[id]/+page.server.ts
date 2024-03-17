@@ -15,8 +15,7 @@ export async function load ({ params, locals: { supabase }}) {
     }
 
     if (!data) {
-        error(404, "Not found");
-        return
+        throw error(404, "Not found");
     }
 
     return {

@@ -52,7 +52,7 @@
             }
 
             messageStore.showSuccess("Logged in.")
-            goto("/home")
+            goto("/")
 
         } else {
             if (!name) {

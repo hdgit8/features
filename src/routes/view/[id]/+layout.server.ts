@@ -2,23 +2,32 @@ import marked from '$lib/markdown/markdown.js'
 import { error } from '@sveltejs/kit'
 
 export async function load ({ params, locals: { supabase }}) {
-    const{data} = await supabase.from("courses").select("*, course_marketing(*)").eq("id", params.id)
-    if (data) {
-        if (data[0].banner_path) {
-            const result = supabase.storage.from("courses").getPublicUrl(data[0].banner_path)
-            data[0]["public_url"] = result.data.publicUrl
+    const{data:courses} = await supabase.from("courses").select("*").eq("id", params.id)
+    if (courses) {
+        if (courses[0].banner_path) {
+            const result = supabase.storage.from("courses").getPublicUrl(courses[0].banner_path)
+            courses[0]["public_url"] = result.data.publicUrl
         }
-        if (data[0]?.course_marketing?.markdown) {
-            const markdownHTML = await marked.parse(data[0].course_marketing.markdown);
-            data[0].course_marketing["markdownHtml"] = markdownHTML;
+        if (courses[0]?.course_marketing?.markdown) {
+            const markdownHTML = await marked.parse(courses[0].course_marketing.markdown);
+            courses[0].course_marketing["markdownHtml"] = markdownHTML;
         }
     }
 
-    if (!data && !data?.length) {
+    const{data:modules} = await supabase.from("modules")
+            .select("id, num, name, sections (id, name, num)")
+            .order("num")
+            .order("num", { referencedTable: "sections"})
+            .eq("course_id", courses[0].id)
+
+    if (!courses && !courses?.length) {
         throw error(404, "Not Found")
     }
 
     return {
-        course: data[0]
+        course: {
+            ...courses[0],
+            "modules": modules
+        }
     }
 }

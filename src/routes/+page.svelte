@@ -1,67 +1,59 @@
-<script>
+<script lang="ts">
     import Course from '$lib/components/Course/CourseCard.svelte';
 	import CourseList from '$lib/components/CourseList.svelte';
 	import Navbar from '$lib/components/Navbar.svelte';
-
-	import { onMount } from 'svelte';
     export let data
-    let { supabase, session, courses } = data
-    $: ({ supabase, session } = data) // listen to changes
+    let { supabase, session, createdCourses, recommendedCourses } = data
+    $: ({ supabase, session, createdCourses, recommendedCourses } = data) // listen to changes
 </script>
+
+<svelte:head>
+    <title>Sparker - Home</title>
+</svelte:head>
 
 <Navbar bind:supabase={supabase} bind:session={session}></Navbar>
 
-<div class="min-h-[100vh] max-h-[100vh]">
-    <div class="absolute top-0 right-0 left-0 z-0">
+<div class="pb-5 pt-16">
+    <div class="mr-5 mb-5 transition-all">
+        {#if session}
         <div
-            style="background-image:url('/relaxing.png');"
-            class="min-h-[100vh] fade-in max-h-[100vh] min-w-full bg-cover bg-top xl:bg-left"
-        >
+            class="text-white h-96 lg:max-w-100% p-4 rounded-2xl">
+            <h1>Welcome {session?.user.user_metadata.name}</h1>
         </div>
+        {:else}
         <div
-            class="absolute top-0 left-0 right-0 h-[100vh]"
-            style="background: linear-gradient(to bottom, rgb(0, 0, 0, 0) 70%, #000 100%);"
-        />
+            class="text-white h-96 lg:max-w-100% p-4 rounded-2xl text-2xl">
+            <h1>The Best Learning Experience,</h1>
+            <h1>Amplified</h1>
+        </div>
+        {/if}
+    </div>
+
+    <div class="flex flex-col gap-10">
+        {#if session}
+        <div class="">
+            <div class="flex mb-2 px-5">
+                <div class="font-semibold text-lg ml-1 text-white">Recently Viewed</div>
+                <div class="font-semibold ml-auto h-min text-gray-500 text-xs flex bg-[--dark-700] p-[0.2rem] rounded-full px-2">
+                    <span>View All</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4">
+                        <path fill-rule="evenodd" d="M2 10a.75.75 0 01.75-.75h12.59l-2.1-1.95a.75.75 0 111.02-1.1l3.5 3.25a.75.75 0 010 1.1l-3.5 3.25a.75.75 0 11-1.02-1.1l2.1-1.95H2.75A.75.75 0 012 10z" clip-rule="evenodd" />
+                    </svg>
+                </div>
+            </div>
+            <div class="grid px-5 grid-flow-col auto-cols-[10rem] lg:auto-cols-[15rem] transition-all gap-5 overflow-x-scroll">
+                <Course></Course>
+                <Course></Course>
+                <Course></Course>
+                <Course></Course>
+                <Course></Course>
+                <Course></Course>
+            </div>
+        </div>
+    
+        <CourseList href="#" name="Recommended Courses" courses={recommendedCourses}></CourseList>
+        <CourseList href="#" name="Created by You" courses={createdCourses}></CourseList>
+        {/if}
+        <CourseList href="#" name="Most Popular Courses" courses={recommendedCourses}></CourseList>
     </div>
 </div>
-
-<!-- TEXT -->
-<div class="absolute top-0 left-0 right-0 z-10 px-10 h-[100vh] mb-10 flex flex-col">
-    <div class="container max-w-7xl mx-auto">
-        <div class="text-6xl lg:text-8xl pt-16 text-white font-effect-hero font-rubik text-transparent bg-clip-text bg-gradient-to-br from-white to-gray-500 mt-[5vh]">
-            Learn to Code
-        </div>
-        <div class="md:text-lg lg:text-xl py-5 font-light text-transparent bg-clip-text bg-gradient-to-br from-white to-gray-600">
-            <p>The best online learning experience instead of random tutorials.</p>
-        </div>
-        <div class="mt-auto mb-24">
-            <a href="/home" class="mr-auto w-fit transition-all hover:opacity-80 flex bg-white px-5 p-3 rounded-full font-bold text-sm">
-                <span class="text-black">Learn to Code</span>
-                <svg xmlns="http://www.w3.org/2000/svg" style="padding-top:.25rem;" viewBox="0 0 16 16" fill="currentColor" class="w-4 h-4 text-gray-800">
-                    <path fill-rule="evenodd" d="M6.22 4.22a.75.75 0 0 1 1.06 0l3.25 3.25a.75.75 0 0 1 0 1.06l-3.25 3.25a.75.75 0 0 1-1.06-1.06L8.94 8 6.22 5.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
-                </svg>
-            </a>
-        </div>
-    </div>
-</div>
-
-<div class="container max-w-7xl mx-auto pb-10">
-    <!-- COURSES -->
-    <CourseList href="#" name="Most Popular Courses" courses={courses}></CourseList>
-</div>
-
-<style>
-     .fade-in {
-        opacity: 1;
-        animation: fade-in-anim 3s;
-    }
-
-    @keyframes fade-in-anim {
-        from {
-            opacity: 0;
-        }
-        to {
-            opacity: 1;
-        }
-    }
-</style>

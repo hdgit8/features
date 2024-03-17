@@ -99,7 +99,7 @@
         </button>
     </a>
     {#if sections.length}
-        <div class="flex flex-col">
+        <div class="flex flex-col pt-1">
             {#each sections as section(section.id)}
                 <Section on:update={sortSections} {supabase} moduleId={moduleId} courseId={courseId} bind:moduleNum={num} sectionId={section.id} bind:name={section.name} bind:num={section.num}></Section>
             {/each}
