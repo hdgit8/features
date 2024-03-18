@@ -1,4 +1,4 @@
-import { error } from '@sveltejs/kit'
+import { error, redirect } from '@sveltejs/kit'
 
 export async function load ({ params, locals: { supabase }}) {
     const{data:courses} = await supabase.from("courses").select().eq("id", params.id)
@@ -19,7 +19,18 @@ export async function load ({ params, locals: { supabase }}) {
         throw error(404, "Not Found")
     }
 
-    return {
+    const course = courses[0];
+    if (modules && modules?.length) {
+        const module = modules[0];
+        if (module?.sections && module?.sections.length) {
+            const section = module.sections[0];
+            throw redirect(302, `/view/${course.id}/${module.id}/${section.id}`)
+        }
+
+        throw redirect(302, `/view/${course.id}/${module.id}`)
+    }
+
+    return  {
         course: {
             ...courses[0],
             "modules": modules
