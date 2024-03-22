@@ -52,7 +52,7 @@
     <a href="/auth" class="ml-auto transition-all hover:bg-white/25 rounded-full mx-5 flex px-4 p-2 font-bold text-sm">
         <span>Sign In</span>
     </a>
-    <a href="/home" class="transition-all hover:opacity-80 flex bg-white px-4 p-2 rounded-full text-sm">
+    <a href="/view/f52e809e-b9c5-482c-a58b-961448708f4d" class="transition-all hover:opacity-80 flex bg-white px-4 p-2 rounded-full text-sm">
         <span class="text-black font-medium">Get Started</span>
         <svg xmlns="http://www.w3.org/2000/svg" style="padding-top:.25rem;" viewBox="0 0 16 16" fill="currentColor" class="w-4 h-4 text-gray-800">
             <path fill-rule="evenodd" d="M6.22 4.22a.75.75 0 0 1 1.06 0l3.25 3.25a.75.75 0 0 1 0 1.06l-3.25 3.25a.75.75 0 0 1-1.06-1.06L8.94 8 6.22 5.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
